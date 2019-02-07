@@ -14,10 +14,31 @@ export default {
   components: {
     photo
   },
+  data() {
+    return {
+      photos: [],
+      photosCount: null
+    };
+  },
   created() {
-    (async () => {
-      const data = await flickrService.getPhotos();
-    })();
+    flickrService
+      .getPhotos()
+      .then(response => {
+        response instanceof Error
+          ? handleError(response)
+          : this.setData(response);
+      })
+      .catch(e => e);
+  },
+  methods: {
+    handleError(e) {
+      //TODO: зробити функцыю глобальною
+      alert(e); // TODO: написати обробку помилок
+    },
+    setData({ photos }) {
+      this.photos = photos.photo;
+      this.photosCount = photos.total;
+    }
   }
 };
 </script>

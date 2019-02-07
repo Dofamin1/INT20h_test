@@ -1,6 +1,6 @@
 import axios from "axios";
 const apiKey = "ccae4d36e13dc2038bf32014adf1b64a";
-const galleryId = "72157706084897874";
+const galleryId = "72157706084897874"; //TODO: це не правильний ID, правильний чомусь не працю
 const methodName = "flickr.galleries.getPhotos";
 const responseFormat = "json&nojsoncallback=1";
 const flickrUrl = `https://api.flickr.com/services/rest/?method=${methodName}&api_key=${apiKey}&gallery_id=${galleryId}&format=${responseFormat}`;
@@ -10,9 +10,7 @@ const service = {
     return axios
       .get(flickrUrl, { responseType: "json" })
       .then(({ data }) => {
-        return data.stat === "ok"
-          ? data.photos
-          : new Error("error with flickr API");
+        return data.stat === "ok" ? data : new Error("error with flickr API");
       })
       .catch(e => {
         return e;
