@@ -5,11 +5,11 @@
 </template>
 
 <script>
-import mainPage from "./components/mainPage/index.vue";
+import mainPage from "./pages/mainPage/index.vue"; //TODO: може перейменувати?
 export default {
   name: "app",
   components: {
-    mainPage
+    mainPage //TODO: може перейменувати?
   }
 };
 </script>
