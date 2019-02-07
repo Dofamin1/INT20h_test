@@ -1,27 +1,27 @@
 <template>
   <div>
     <div>photo container</div>
-    <photo></photo>
+    <photo />
   </div>
 </template>
 
 <script>
-import photo from "./components/photo/index.vue";
-import flickrService from "../../api-services/flickrService.js";
+import photo from './components/photo/index.vue';
+import flickrService from '../../api-services/flickrService';
 
 export default {
-  name: "photoContainer",
+  name: 'PhotoContainer',
   components: {
-    photo
+    photo,
   },
   data() {
     return {
       photos: [],
-      photosCount: null
+      photosCount: null,
     };
   },
   created() {
-    flickrService.getAllPhotos(); //TODO: дописати обробку помилок + сортування повторів фоток
+    flickrService.getAllPhotos(); // TODO: дописати обробку помилок + сортування повторів фоток
     // .then(response => {
     //   response instanceof Error
     //     ? handleError(response)
@@ -31,14 +31,14 @@ export default {
   },
   methods: {
     handleError(e) {
-      //TODO: зробити функцыю глобальною
+      // TODO: зробити функцыю глобальною
       alert(e); // TODO: написати обробку помилок
     },
     setData({ photos }) {
       this.photos = photos.photo;
       this.photosCount = photos.total;
-    }
-  }
+    },
+  },
 };
 </script>
 

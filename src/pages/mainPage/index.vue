@@ -1,21 +1,21 @@
 <template>
   <div>
     <div>Whole page</div>
-    <emotionFilter></emotionFilter>
-    <photoContainer></photoContainer>
+    <emotionFilter />
+    <photoContainer />
   </div>
 </template>
 
 <script>
-import emotionFilter from "../../components/emotionFilter/index.vue";
-import photoContainer from "../../components/photoContainer/index.vue";
+import emotionFilter from '../../components/emotionFilter/index.vue';
+import photoContainer from '../../components/photoContainer/index.vue';
 
 export default {
-  name: "mainPage",
+  name: 'MainPage',
   components: {
     emotionFilter,
-    photoContainer
-  }
+    photoContainer,
+  },
 };
 </script>
 

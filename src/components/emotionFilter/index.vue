@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: "emotionFilter"
+  name: 'EmotionFilter',
 };
 </script>
 
