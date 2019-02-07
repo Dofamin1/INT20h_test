@@ -2,7 +2,11 @@
   <div>
     <div>photo container</div>
     <div class="photos">
-      <photo v-for="photo in photos" :key="photo.id" :photo="photo"/>
+      <photo
+        v-for="photo in photos"
+        :key="photo.id"
+        :photo="photo"
+      />
     </div>
   </div>
 </template>
@@ -24,19 +28,16 @@ export default {
   created() {
     flickr
       .getAllPhotos()
-      .then(response =>
-        response instanceof Error
-          ? this.handleError(response)
-          : this.handleData(response),
-      )
+      .then(response => (response instanceof Error
+        ? this.handleError(response)
+        : this.handleData(response)))
       .catch(e => console.error(e));
   },
   methods: {
-    removeDuplicates({array, prop}) {
-      //TODO: move to helpers folder
+    removeDuplicates({ array, prop }) {
+      // TODO: move to helpers folder
       return array.filter(
-        (obj, pos, arr) =>
-          arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos,
+        (obj, pos, arr) => arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos,
       );
     },
     handleError(e) {

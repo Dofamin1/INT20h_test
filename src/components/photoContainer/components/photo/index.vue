@@ -1,7 +1,10 @@
 <template>
   <div class="photo">
     <div>{{ photo.title }}</div>
-    <img :src="src" :alt="photo.title">
+    <img
+      :src="src"
+      :alt="photo.title"
+    >
   </div>
 </template>
 
@@ -16,7 +19,9 @@ export default {
   },
   computed: {
     src() {
-      const {farm, server, id, secret} = this.photo;
+      const {
+        farm, server, id, secret,
+      } = this.photo;
       return `https://farm${farm}.staticflickr.com/${server}/${id}_${secret}.jpg`;
     },
   },

@@ -4,13 +4,10 @@ const apiKey = 'ccae4d36e13dc2038bf32014adf1b64a';
 const responseFormat = 'json&nojsoncallback=1';
 const baseFlickrUrl = `https://api.flickr.com/services/rest/?api_key=${apiKey}&format=${responseFormat}`;
 
-const makeRequest = url =>
-  axios
-    .get(url, {responseType: 'json'})
-    .then(({data}) =>
-      data.stat === 'ok' ? data : new Error('Error with Flickr API'),
-    )
-    .catch(e => e);
+const makeRequest = url => axios
+  .get(url, { responseType: 'json' })
+  .then(({ data }) => (data.stat === 'ok' ? data : new Error('Error with Flickr API')))
+  .catch(e => console.log(e));
 
 const service = {
   getPhotosByGallery() {
