@@ -17,7 +17,7 @@ const service = {
   },
   getPhotosByTag() {
     const tag = 'int20h';
-    const url = `${baseFlickrUrl}&method=flickr.photos.search&tags=${tag}`;
+    const url = `${baseFlickrUrl}&method=flickr.photos.search&tags=${tag}&extras=url_o`;
     return makeRequest(url);
   },
   getAllPhotos() {

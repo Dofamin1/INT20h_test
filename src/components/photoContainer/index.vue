@@ -1,7 +1,20 @@
 <template>
   <div>
     <div>photo container</div>
-    <photo />
+    <div class="photos">
+      <photo
+        v-for="{id, farm, server, secret, title, url_o} in photos"
+        :key="id"
+        :photo-id="id.toString()"
+        :farm="farm.toString()"
+        :server="server.toString()"
+        :secret="secret.toString()"
+        :title="title.toString()"
+        :url-original="url_o ? url_o.toString(): ''"
+      />
+      <!-- propery.toString() - because Flicr could return the same `property` with different types
+      in different objects. -->
+    </div>
   </div>
 </template>
 
@@ -16,11 +29,11 @@ export default {
   },
   data() {
     return {
-      photos: [],
+      photos: [], // TODO: should be renamed in `photoObjects` ?
     };
   },
   created() {
-    flickr.getAllPhotos() // TODO: дописати обробку помилок + сортування повторів фоток
+    flickr.getAllPhotos()
       .then(response => (response instanceof Error
         ? this.handleError(response)
         : this.handleData(response)))
@@ -32,16 +45,18 @@ export default {
         arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos));
     },
     handleError(e) {
-      // TODO: зробити функцыю глобальною
-      alert(e); // TODO: написати обробку помилок
+      // TODO: global error handler
+      window.alert(e);
     },
     handleData(data) {
+      console.log(data);
       const [galleryData, tagData] = [data[0].photos, data[1].photos];
       const rawPhotos = [...galleryData.photo, ...tagData.photo];
       const filteredPhotos = this.removeDuplicates(rawPhotos, 'id');
       this.setData(filteredPhotos);
     },
     setData(photos) {
+      console.log(photos);
       this.photos = photos;
     },
   },
