@@ -6,7 +6,7 @@ const baseFlickrUrl = `https://api.flickr.com/services/rest/?api_key=${apiKey}&f
 
 const makeRequest = url => axios
   .get(url, { responseType: 'json' })
-  .then(({ data }) => (data.stat === 'ok' ? data : new Error('error with flickr API')))
+  .then(({ data }) => (data.stat === 'ok' ? data : new Error('Error with Flickr API')))
   .catch(e => e);
 
 const service = {
