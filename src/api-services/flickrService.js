@@ -1,20 +1,35 @@
 import axios from "axios";
 const apiKey = "ccae4d36e13dc2038bf32014adf1b64a";
-const galleryId = "72157706084897874"; //TODO: це не правильний ID, правильний чомусь не працю
-const methodName = "flickr.galleries.getPhotos";
 const responseFormat = "json&nojsoncallback=1";
-const flickrUrl = `https://api.flickr.com/services/rest/?method=${methodName}&api_key=${apiKey}&gallery_id=${galleryId}&format=${responseFormat}`;
+const baseFlickrUrl = `https://api.flickr.com/services/rest/?api_key=${apiKey}&format=${responseFormat}`;
+
+const makeRequest = url => {
+  return axios
+    .get(url, { responseType: "json" })
+    .then(({ data }) => {
+      return data.stat === "ok" ? data : new Error("error with flickr API");
+    })
+    .catch(e => {
+      return e;
+    });
+};
 
 const service = {
-  getPhotos() {
-    return axios
-      .get(flickrUrl, { responseType: "json" })
-      .then(({ data }) => {
-        return data.stat === "ok" ? data : new Error("error with flickr API");
-      })
-      .catch(e => {
-        return e;
-      });
+  getPhotosByGallery() {
+    const galleryId = "72157706084897874";
+    const url = `${baseFlickrUrl}&method=flickr.galleries.getPhotos&gallery_id=${galleryId}&extras=url_o`;
+    return makeRequest(url);
+  },
+  getPhotosByTag() {
+    const tag = "int20h";
+    const url = `${baseFlickrUrl}&method=flickr.photos.search&tags=${tag}`;
+    return makeRequest(url);
+  },
+  getAllPhotos() {
+    return Promise.all([
+      service.getPhotosByGallery(),
+      service.getPhotosByTag()
+    ]);
   }
 };
 

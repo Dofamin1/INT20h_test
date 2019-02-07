@@ -21,14 +21,13 @@ export default {
     };
   },
   created() {
-    flickrService
-      .getPhotos()
-      .then(response => {
-        response instanceof Error
-          ? handleError(response)
-          : this.setData(response);
-      })
-      .catch(e => e);
+    flickrService.getAllPhotos(); //TODO: дописати обробку помилок + сортування повторів фоток
+    // .then(response => {
+    //   response instanceof Error
+    //     ? handleError(response)
+    //     : this.setData(response);
+    // })
+    // .catch(e => e);
   },
   methods: {
     handleError(e) {
