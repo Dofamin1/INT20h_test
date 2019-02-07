@@ -2,18 +2,7 @@
   <div>
     <div>photo container</div>
     <div class="photos">
-      <photo
-        v-for="{id, farm, server, secret, title, url_o} in photos"
-        :key="id"
-        :photo-id="id.toString()"
-        :farm="farm.toString()"
-        :server="server.toString()"
-        :secret="secret.toString()"
-        :title="title.toString()"
-        :url-original="url_o ? url_o.toString(): ''"
-      />
-      <!-- propery.toString() - because Flicr could return the same `property` with different types
-      in different objects. -->
+      <photo v-for="photo in photos" :key="photo.id" :photo="photo"/>
     </div>
   </div>
 </template>
@@ -29,35 +18,42 @@ export default {
   },
   data() {
     return {
-      photos: [], // TODO: should be renamed in `photoObjects` ?
+      photos: [],
     };
   },
   created() {
-    flickr.getAllPhotos()
-      .then(response => (response instanceof Error
-        ? this.handleError(response)
-        : this.handleData(response)))
-      .catch(e => e);
+    flickr
+      .getAllPhotos()
+      .then(response =>
+        response instanceof Error
+          ? this.handleError(response)
+          : this.handleData(response),
+      )
+      .catch(e => console.error(e));
   },
   methods: {
-    removeDuplicates(array, prop) {
-      return array.filter((obj, pos, arr) => (
-        arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos));
+    removeDuplicates({array, prop}) {
+      //TODO: move to helpers folder
+      return array.filter(
+        (obj, pos, arr) =>
+          arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos,
+      );
     },
     handleError(e) {
       // TODO: global error handler
       window.alert(e);
     },
     handleData(data) {
-      console.log(data);
-      const [galleryData, tagData] = [data[0].photos, data[1].photos];
-      const rawPhotos = [...galleryData.photo, ...tagData.photo];
-      const filteredPhotos = this.removeDuplicates(rawPhotos, 'id');
-      this.setData(filteredPhotos);
-    },
-    setData(photos) {
-      console.log(photos);
-      this.photos = photos;
+      const reducer = (accumulator, currentValue) => [
+        ...accumulator,
+        ...currentValue.photos.photo,
+      ];
+      const allPhotos = data.reduce(reducer, []);
+      const photosWithoutDublicates = this.removeDuplicates({
+        array: allPhotos,
+        prop: 'id',
+      });
+      this.photos = photosWithoutDublicates;
     },
   },
 };
