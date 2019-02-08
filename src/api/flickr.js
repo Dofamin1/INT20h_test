@@ -1,4 +1,5 @@
 import axios from 'axios';
+import helpers from '../helpers/helpers.js';
 
 const apiKey = 'ccae4d36e13dc2038bf32014adf1b64a';
 const responseFormat = 'json&nojsoncallback=1';
@@ -24,7 +25,18 @@ const service = {
     return Promise.all([
       service.getPhotosByGallery(),
       service.getPhotosByTag(),
-    ]);
+    ]).then((data) => {
+      const reducer = (accumulator, currentValue) => [
+        ...accumulator,
+        ...currentValue.photos.photo,
+      ];
+      const allPhotos = data.reduce(reducer, []);
+      const photosWithoutDuplicates = helpers.removeDuplicates({
+        array: allPhotos,
+        prop: 'id',
+      });
+      return photosWithoutDuplicates
+    });
   },
 };
 
