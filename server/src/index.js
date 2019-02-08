@@ -1,16 +1,20 @@
 const promiseFinally = require('promise.prototype.finally');
-const express = require('express');
-const faceAnalyzer = require('./services/facepp.js');
-
-const app = express();
-const port = 3000;
+const http = require('http');
+const config = require('./config').general;
 
 promiseFinally.shim();
 
-faceAnalyzer.getPhotosInfo();
-
-app.get('/', (req, res) => {
-  res.send('hello world');
+const server = http.createServer((req, res) => {
+  res.statusCode = 200;
+  res.setHeader('Content-Type', 'text/plain');
+  res.end('Hello, %your_name%.');
 });
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+
+server.on('clientError', (err, socket) => {
+  socket.end('HTTP/1.1 400 Bad Request\r\n\r\n');
+});
+
+server.listen(config.port, () => {
+  console.log(`Listening on port ${config.port}!`);
+});

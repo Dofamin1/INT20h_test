@@ -1,3 +1,7 @@
+const general = {
+  port: 3000,
+};
+
 const firebase = {
   apiKey: 'AIzaSyBrS-5hnPHKAzZhIbjv52j2nNYZLi9HDn4',
   authDomain: 'int20h-c53da.firebaseapp.com',
@@ -17,6 +21,7 @@ const facepp = {
 };
 
 module.exports = {
+  general,
   firebase,
   flickr,
   facepp,
