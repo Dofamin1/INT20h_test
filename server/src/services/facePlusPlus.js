@@ -24,11 +24,11 @@ const analyzePhotos = async photos => {
   asyncForEach(photos, function(photo) {
     const imageUrl = getImageUrl(photos[0]);
     const facePlusPlusUrl = `${baseUrl}api_key=${apiKey}&api_secret=${apiSecret}&image_url=${imageUrl}`;
-    var done = this.async();
+    const done = this.async();
     setTimeout(() => {
       done();
       makeRequest(facePlusPlusUrl);
-    }, 3000);
+    }, 1000);
   });
 };
 const faceAnalyzer = {
