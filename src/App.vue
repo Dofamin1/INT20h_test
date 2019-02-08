@@ -1,10 +1,17 @@
 <template>
-  <div id="app"></div>
+  <div id="app">
+    <mainPage />
+  </div>
 </template>
 
 <script>
+import mainPage from './pages/mainPage/index.vue';
+// TODO: може перейменувати?
 export default {
-  name: "app"
+  name: 'App',
+  components: {
+    mainPage, // TODO: може перейменувати?
+  },
 };
 </script>
 
