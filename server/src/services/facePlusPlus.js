@@ -2,12 +2,13 @@ const axios = require("axios");
 const flickr = require("./flickr");
 const helpers = require("../helpers/helpers.js");
 const asyncForEach = require("async-foreach").forEach;
+const config = require('../config').facepp
 
-const apiKey = "x-q8iByG34SuZR3TFIh6UbWLIkSrrsyM";
-const apiSecret = "ymjVxDrcYSh7Z97g630zVm1WfZkfiokw";
+const apiKey = config.apiKey;
+const apiSecret = config.apiSecret;
 const baseUrl = "https://api-us.faceplusplus.com/facepp/v3/detect?";
 
-let requestsCount = 1;
+let requestsCount = 1; 
 const photosInfoStorage = [];
 
 const writeToFireBase = () => { console.log(photosInfoStorage) };

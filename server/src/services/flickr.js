@@ -1,7 +1,8 @@
 const axios = require("axios");
 const helpers = require("../helpers/helpers.js");
+const config = require('../config').flickr
 
-const apiKey = "ccae4d36e13dc2038bf32014adf1b64a";
+const apiKey = config.apiKey;
 const responseFormat = "json&nojsoncallback=1";
 const baseFlickrUrl = `https://api.flickr.com/services/rest/?api_key=${apiKey}&format=${responseFormat}`;
 
@@ -26,7 +27,7 @@ const service = {
   },
   getAllPhotos() {
     return Promise.all([
-      service.getPhotosByGallery(),
+      // service.getPhotosByGallery(),
       service.getPhotosByTag()
     ]).then(data => {
       const reducer = (accumulator, currentValue) => [
