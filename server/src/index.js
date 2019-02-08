@@ -1,9 +1,11 @@
+const promiseFinally = require('promise.prototype.finally');
 const faceAnalyzer = require("./services/facePlusPlus.js");
 
 const express = require("express");
 const app = express();
 const port = 3000;
 
+promiseFinally.shim();
 faceAnalyzer.getPhotosInfo();
 
 app.get("/", (req, res) => {
