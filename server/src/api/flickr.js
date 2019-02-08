@@ -1,38 +1,56 @@
 const axios = require('axios');
+const url = require('url');
 const helpers = require('../helpers.js');
 const config = require('../config').flickr;
 
-const { apiKey } = config;
-const responseFormat = 'json&nojsoncallback=1';
-const baseFlickrUrl = `https://api.flickr.com/services/rest/?api_key=${apiKey}&format=${responseFormat}`;
+const { baseUrl, apiKey } = config;
 
-const makeRequest = url => axios
-  .get(url, { responseType: 'json' })
+const makeRequest = reqUrl => axios
+  .get(reqUrl, { responseType: 'json' })
   .then(({ data }) => (data.stat === 'ok' ? data : new Error('Error with Flickr API')))
   .catch(e => console.log(e));
 
-const service = {
-  getPhotosByGallery() {
-    const galleryId = '72157706084897874';
-    const url = `${baseFlickrUrl}&method=flickr.galleries.getPhotos&gallery_id=${galleryId}&extras=url_o`;
-    return makeRequest(url);
+
+const flickr = {
+  composeImageUrl({
+    farm, server, id, secret,
+  }) {
+    return `https://farm${farm}.staticflickr.com/${server}/${id}_${secret}.jpg`;
   },
-  getPhotosByTag() {
-    const tag = 'int20h';
-    const url = `${baseFlickrUrl}&method=flickr.photos.search&tags=${tag}`;
-    return makeRequest(url);
+
+  getPhotosByGalleryId(galleryId) {
+    const params = new url.URLSearchParams({
+      api_key: apiKey,
+      format: 'json',
+      nojsoncallback: '1',
+      method: 'flickr.galleries.getPhotos',
+      gallery_id: galleryId,
+    });
+    const reqUrl = `${baseUrl}?${params.toString()}`;
+    return makeRequest(reqUrl);
+  },
+  getPhotosByTags(tags) {
+    const params = new url.URLSearchParams({
+      api_key: apiKey,
+      format: 'json',
+      nojsoncallback: '1',
+      method: 'flickr.photos.search',
+      tags: tags.join(','),
+    });
+    const reqUrl = `${baseUrl}?${params.toString()}`;
+    return makeRequest(reqUrl);
   },
   getAllPhotos() {
     return Promise.all([
-      // service.getPhotosByGallery(),
-      service.getPhotosByTag(),
+      flickr.getPhotosByGalleryId('72157706084897874'),
+      flickr.getPhotosByTags(['int20h']),
     ]).then((data) => {
+      console.log(data);
       const reducer = (accumulator, currentValue) => [
         ...accumulator,
         ...currentValue.photos.photo,
       ];
       const allPhotos = data.reduce(reducer, []);
-      console.log('asdfasdf', allPhotos.length);
       const photosWithoutDuplicates = helpers.removeDuplicates({
         array: allPhotos,
         prop: 'id',
@@ -41,4 +59,5 @@ const service = {
     });
   },
 };
-module.exports = service;
+
+module.exports = flickr;
