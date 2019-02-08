@@ -1,5 +1,5 @@
 const promiseFinally = require('promise.prototype.finally');
-const faceAnalyzer = require("./services/facePlusPlus.js");
+const faceAnalyzer = require("./services/facepp.js");
 
 const express = require("express");
 const app = express();

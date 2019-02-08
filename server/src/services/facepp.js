@@ -1,6 +1,6 @@
 const axios = require("axios");
 const flickr = require("./flickr");
-const helpers = require("../helpers/helpers.js");
+const helpers = require("../helpers.js");
 const asyncForEach = require("async-foreach").forEach;
 const config = require('../config').facepp
 

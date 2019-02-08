@@ -1,5 +1,5 @@
 const axios = require("axios");
-const helpers = require("../helpers/helpers.js");
+const helpers = require("../helpers.js");
 const config = require('../config').flickr
 
 const apiKey = config.apiKey;

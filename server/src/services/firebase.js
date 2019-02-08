@@ -1,5 +1,5 @@
 const firebase = require("firebase");
-const faceAnalyzer = require("./facePlusPlus.js");
+const faceAnalyzer = require("./facepp.js");
 const config = require('../config').firebase
 
 firebase.initializeApp(config);
