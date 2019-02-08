@@ -13,6 +13,7 @@ const flickr = {
 const facepp = {
   apiKey: 'x-q8iByG34SuZR3TFIh6UbWLIkSrrsyM',
   apiSecret: 'ymjVxDrcYSh7Z97g630zVm1WfZkfiokw',
+  request: { frequency: 0 },
 };
 
 module.exports = {
