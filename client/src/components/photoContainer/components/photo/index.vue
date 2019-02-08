@@ -1,6 +1,5 @@
 <template>
   <div class="photo">
-    <div>{{ photo.title }}</div>
     <img
       :src="src"
       :alt="photo.title"
@@ -28,5 +27,12 @@ export default {
 };
 </script>
 
-<style >
+<style scoped>
+.photo{
+  padding-top: 10px;
+}
+.photo > img{
+  width: 100%;
+  vertical-align: middle;
+}
 </style>
