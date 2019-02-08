@@ -7,27 +7,36 @@ const apiKey = "x-q8iByG34SuZR3TFIh6UbWLIkSrrsyM";
 const apiSecret = "ymjVxDrcYSh7Z97g630zVm1WfZkfiokw";
 const baseUrl = "https://api-us.faceplusplus.com/facepp/v3/detect?";
 
-const makeRequest = url =>
+let requestsCount = 1;
+const photosInfoStorage = [];
+
+const writeToFireBase = () => { console.log(photosInfoStorage) };
+const addToDocument = ({ faces, url }) => { photosInfoStorage.push({ faces, url })};
+
+const setupRequests = photoCount => (url, imageUrl) => //TODO: я хэр знає як цю функцію назвати
   axios
     .post(url, { responseType: "json" })
-    .then(
-      ({ data }) => console.log(data)
-    )
-    .catch(e => console.log(e));
+    .then(({data}) => addToDocument({ faces: data.faces, url: imageUrl }))
+    .catch(e => console.log(e))
+    .finally(() => {
+      requestsCount === photoCount ? writeToFireBase() : requestsCount += 1
+    });
 
 const getImageUrl = ({ farm, server, id, secret }) =>
   `https://farm${farm}.staticflickr.com/${server}/${id}_${secret}.jpg`;
 
 const analyzePhotos = photos => {
-  let curIndex = 0
-  let facePlusPlusUrl, imageUrl;
-  const interval = setInterval(function(){
-      if (curIndex === photos.length) clearInterval(interval); 
-      imageUrl = getImageUrl(photos[curIndex]);
-      facePlusPlusUrl = `${baseUrl}api_key=${apiKey}&api_secret=${apiSecret}&image_url=${imageUrl}`;
-      makeRequest(facePlusPlusUrl);
-      curIndex += 1
-  },1000)
+      const facePlusPlusRequestInterval = 1500;
+      const makeRequest = setupRequests(photos.length)
+      asyncForEach(photos, function(photo) {
+        const imageUrl = getImageUrl(photo);
+        const facePlusPlusUrl = `${baseUrl}api_key=${apiKey}&api_secret=${apiSecret}&image_url=${imageUrl}`;
+        const done = this.async();
+        setTimeout(() => { 
+          done();
+          makeRequest(facePlusPlusUrl, imageUrl) 
+        }, facePlusPlusRequestInterval);
+      });
 };
 const faceAnalyzer = {
   getPhotosInfo: () => {
