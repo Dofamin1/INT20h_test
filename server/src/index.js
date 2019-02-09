@@ -20,8 +20,8 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
-server.on('clientError', (err, socket) => {
-  socket.end('HTTP/1.1 400 Bad Request\r\n\r\n');
+server.on('clientError', (err, res) => {
+  res.end('HTTP/1.1 400 Bad Request\r\n\r\n');
 });
 
 server.listen(config.port, () => {

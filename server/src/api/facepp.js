@@ -24,13 +24,6 @@ const analyzePhoto = (reqUrl, photo, callback) => {
       analyzedData.push({
         faces: data.faces,
         url: photo.url,
-        flickrData: {
-          id: photo.id,
-          owner: photo.owner,
-          secret: photo.secret,
-          server: photo.server,
-          farm: photo.farm,
-        },
       });
     })
     .then(callback)
