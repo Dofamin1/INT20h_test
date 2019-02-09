@@ -14,7 +14,7 @@ const flickr = {
   apiKey: 'ccae4d36e13dc2038bf32014adf1b64a',
   secret: 'bee23d631426ba3a',
   baseUrl: 'https://api.flickr.com/services/rest',
-  updateFrequency: 2000,
+  updateFrequency: 2500,
 };
 
 const facepp = {
