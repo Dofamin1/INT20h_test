@@ -1,60 +1,39 @@
 const db = require('./db/main.js');
-const helpers = require('../helpers.js');
+const { updateFrequency } = require('../config').flickr;
+const { getPhotoId } = require('../helpers.js');
 const facepp = require('../api/facepp.js')(db);
 const flickr = require('../api/flickr.js');
 
-const dbImagesList = [];
+const mongodbPhotosIDList = [];
 
+const photoIsNew = photo => mongodbPhotosIDList.indexOf(getPhotoId(photo)) === -1;
 
-const fetchFlickrPhotos = async () => flickr.fetchAllPhotos();
-// .then((photos) => {
-//   flickr.addUrlToPhotos(photos);
-//   // cb(photos);
-//   return photos;
-// })
-// .catch(e => console.log(e));
-const photoExists = photo => dbImagesList.indexOf(helpers.hash(photo.url)) !== -1;
+const fetchPhotosFromMongodb = async () => {
+  await db.getPhotos().then((photos) => {
+    const photosIds = photos.map(photo => getPhotoId(photo));
+    mongodbPhotosIDList.push(...photosIds);
+  });
+};
 
-fetchFlickrPhotos((photosFlickr) => {
-  const filteredPhotos = photosFlickr.filter(photo => !photoExists(photo));
-  if (filteredPhotos.length > 0) {
-    facepp.analyzePhotos(photosFlickr);
+const fetchNewPhotos = async () => {
+  const allPhotos = await flickr.fetchAllPhotos().then(flickr.addUrlToPhotos);
+  const newPhotos = allPhotos.filter(photo => photoIsNew(photo));
+  return newPhotos;
+};
+
+const getUpdates = async () => {
+  const newPhotos = await fetchNewPhotos();
+  if (newPhotos.length > 0) {
+    facepp.analyzePhotos(newPhotos);
   } else {
-    console.log('All images already in db');
+    console.log('Nothing new found.');
   }
-});
-
-// const fetchSavedPhotos = async () => ;
+};
 
 
 const start = async () => {
-  await db.getPhotos().then((photos) => {
-    dbImagesList.push(...photos.map(el => helpers.hash(el.url)));
-    console.log('in db now: ', dbImagesList);
-  });
-  await fetchFlickrPhotos().then((photos) => {
-    flickr.addUrlToPhotos(photos);
-    photos.forEach((el) => {
-      console.log(helpers.hash(el.url));
-    });
-    console.log(photos);
-
-    const filteredPhotos = photos.filter(photo => !photoExists(photo));
-    console.log(photos.length, filteredPhotos.length);
-    // return;
-    if (filteredPhotos.length > 0) {
-      facepp.analyzePhotos(filteredPhotos);
-      console.log(filteredPhotos.length);
-    } else {
-      console.log('All images already in db');
-    }
-    // console.log(photos);
-  });
-  // console.log();
-  // fetchSavedPhotos();
-
-  // console.log(, 'fsd');
-  // console.log('afd');
+  await fetchPhotosFromMongodb();
+  setInterval(await getUpdates, updateFrequency);
 };
 
 module.exports = { start };

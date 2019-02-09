@@ -10,6 +10,7 @@ const helpers = {
     const sha1 = crypto.createHash('sha1');
     return sha1.update(string, 'utf-8').digest('hex');
   },
+  getPhotoId: obj => helpers.hash(obj.url),
 };
 
 
