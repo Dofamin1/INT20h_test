@@ -1,6 +1,5 @@
 <template>
   <div class="photo">
-    <div>{{ photo.title }}</div>
     <img
       :src="src"
       :alt="photo.title"
@@ -28,5 +27,8 @@ export default {
 };
 </script>
 
-<style >
+<style>
+ .photo{
+   margin: 10px;
+  }
 </style>

@@ -1,14 +1,12 @@
 <template>
-  <div>
-    <div>photo container</div>
-    <div class="photos">
-      <photo
-        v-for="photo in photos"
-        :key="photo.id"
-        :photo="photo"
-      />
-    </div>
-  </div>
+      <div  horizontal-order="true" class="centerAlign" fit-width="true"  v-masonry transition-duration="0.3s" item-selector=".item">
+        <div v-masonry-tile class="item" v-for="photo in photos">
+          <photo
+              :key="photo.id"
+              :photo="photo"
+            />
+        </div>
+      </div>
 </template>
 
 <script>
@@ -35,7 +33,6 @@ export default {
   },
   methods: {
     handleError(e) {
-      // TODO: global error handler
       window.alert(e);
     },
     handleData(data) {
@@ -46,4 +43,7 @@ export default {
 </script>
 
 <style >
+.centerAlign{
+  margin: auto
+} 
 </style>
