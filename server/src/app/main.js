@@ -1,7 +1,6 @@
-
+const db = require('./db.js');
+const facepp = require('../api/facepp.js')(db);
 const flickr = require('../api/flickr.js');
-const firebase = require('../api/firebase.js');
-const facepp = require('../api/facepp.js')(firebase);
 
 flickr.getAllPhotos()
   .then((photos) => {
@@ -14,3 +13,4 @@ const start = () => {
 };
 
 module.exports = { start };
+

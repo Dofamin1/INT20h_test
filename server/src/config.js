@@ -2,12 +2,12 @@ const general = {
   port: 3000,
 };
 
-const firebase = {
-  apiKey: 'AIzaSyCyaz-C8-KHmRPBf2c4SNl7T6KO9P1GncY',
-  authDomain: 'int20h-test.firebaseapp.com',
-  databaseURL: 'https://int20h-test.firebaseio.com',
-  storageBucket: 'int20h-test.appspot.com',
-  projectId: 'int20h-test',
+const db = {
+  username: 'int20hUser',
+  password: '1234',
+  host: '51.68.215.200',
+  port: '27017',
+  database: 'int20h-testdb',
 };
 
 const flickr = {
@@ -20,12 +20,12 @@ const facepp = {
   apiKey: 'x-q8iByG34SuZR3TFIh6UbWLIkSrrsyM',
   apiSecret: 'ymjVxDrcYSh7Z97g630zVm1WfZkfiokw',
   baseUrl: 'https://api-us.faceplusplus.com/facepp/v3/detect',
-  request: { frequency: 0 },
+  request: { frequency: 300 },
 };
 
 module.exports = {
   general,
-  firebase,
+  db,
   flickr,
   facepp,
 };
