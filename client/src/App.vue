@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <mainPage />
+    <mainPage/>
   </div>
 </template>
 
@@ -16,4 +16,9 @@ export default {
 </script>
 
 <style>
+@media screen and (max-width: 500px) {
+  #app {
+    width: max-content;
+  }
+}
 </style>

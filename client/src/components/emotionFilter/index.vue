@@ -1,7 +1,7 @@
 <template>
-  <div class="emotionFilterWrapper d-flex justify-content-center">
-    <div class="row col-10">
-      <b-form-select v-model="emotion" :options="emotionsList" class="mb-3 selectFilter"/>
+  <div class="d-flex justify-content-center mt-4 mb-4">
+    <div class="col-8">
+      <b-form-select v-model="emotion" :options="emotionsList" class="selectFilter" size="xl"/>
     </div>
   </div>
 </template>
