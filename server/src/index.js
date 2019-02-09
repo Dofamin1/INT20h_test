@@ -10,6 +10,7 @@ const server = http.createServer(async (req, res) => {
   if (req.method === 'GET' && req.url === '/photos') {
     res.writeHead(200, { 'Content-Type': 'text/html' });
     await db.getPhotos().then((photos) => {
+      console.log(JSON.stringify(photos));
       res.end(JSON.stringify(photos));
     });
   } else {

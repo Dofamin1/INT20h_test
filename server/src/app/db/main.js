@@ -1,4 +1,3 @@
-const mongoose = require('mongoose');
 const helpers = require('../../helpers');
 const connection = require('./connection');
 
@@ -10,7 +9,6 @@ const PhotosModel = require('./models/photos')();
 const db = {
   savePhotos: async (photos) => {
     // creating uniq `id` field for insertion into mongo
-    console.log('af');
     photos.forEach((photo) => {
       photo.id = helpers.hash(photo.url);
     });

@@ -8,31 +8,36 @@ const analyzedData = [];
 
 const getMaximumEmotion = (emotions) => {
   const emotionsValues = Object.values(emotions);
-  const maxEmotionValue = Math.max(emotionsValues);
-  const maxEmotionName = Object.keys(emotions).find(key => emotions[key] == maxEmotionValue);
+  const maxEmotionValue = Math.max(...emotionsValues);
+  const maxEmotionName = Object.keys(emotions).find(key => emotions[key] === maxEmotionValue);
   return maxEmotionName;
 };
 
-const callAfterAnalysis = analyzedData => db.savePhotos(analyzedData);
-const deleteFaces = el => delete el.attributes.emotion;
-
-const analyzePhoto = (reqUrl, imageUrl, callback) => {
+const analyzePhoto = (reqUrl, photo, callback) => {
   axios
     .post(reqUrl, { responseType: 'json' })
     .then(({ data }) => {
-      const emotionList = data.faces.length ? [] : data.faces.map(el => el.attributes.emotion);
-      // data.faces.forEach(deleteFaces);
+      data.faces.forEach((face) => {
+        face.emotion = getMaximumEmotion(face.attributes.emotion);
+        delete face.attributes;
+      });
       analyzedData.push({
         faces: data.faces,
-        url: imageUrl,
-        emotions: emotionList.map(getMaximumEmotion),
+        url: photo.url,
+        flickrData: {
+          id: photo.id,
+          owner: photo.owner,
+          secret: photo.secret,
+          server: photo.server,
+          farm: photo.farm,
+        },
       });
     })
     .then(callback)
     .catch(e => console.log(e.message, e.response ? e.response.data : ''));
 };
 
-const photoHandler = (photo) => {
+const photoHandler = function photoHandler(photo) {
   const params = new url.URLSearchParams({
     api_key: apiKey,
     api_secret: apiSecret,
@@ -42,14 +47,15 @@ const photoHandler = (photo) => {
   const reqUrl = `${baseUrl}?${params.toString()}`;
   const done = this.async(); // should be called after async operation is finished
   const callAfterEachRequest = () => setTimeout(done, config.request.frequency);
-  analyzePhoto(reqUrl, photo.url, callAfterEachRequest);
+  analyzePhoto(reqUrl, photo, callAfterEachRequest);
 };
 
 module.exports = function facepp(db) {
   return {
     analyzePhotos: (photos) => {
-      photos.slice(5);
-      asyncForEach(photos, photoHandler, callAfterAnalysis);
+      // Note: next line will be deleted in future. It is for quick testing
+      photos = photos.length > 30 ? photos.slice(0, 30) : photos;
+      asyncForEach(photos, photoHandler, () => db.savePhotos(analyzedData));
     },
   };
 };
