@@ -1,4 +1,5 @@
 const axios = require('axios');
+const url = require('url');
 const asyncForEach = require('async-foreach').forEach;
 const flickr = require('./flickr');
 const config = require('../config').facepp;
@@ -17,9 +18,9 @@ const getMaximumEmotion = (object) => {
   return maxEmotion.name;
 };
 
-const analyzePhoto = (url, imageUrl, cb) => {
+const analyzePhoto = (reqUrl, imageUrl, cb) => {
   axios
-    .post(url, { responseType: 'json' })
+    .post(reqUrl, { responseType: 'json' })
     .then(({ data }) => {
       const emotionList = data.faces.length === 0
         ? []
@@ -45,11 +46,17 @@ module.exports = function facepp(db) {
       photos = photos.length > 30 ? photos.slice(0, 3) : photos; // leave only 3 elements
       asyncForEach(photos, function photoHandler(photo) {
         const imageUrl = flickr.composeImageUrl(photo);
-        const facePlusPlusUrl = `${baseUrl}?api_key=${apiKey}&api_secret=${apiSecret}&image_url=${imageUrl}&return_attributes=emotion`;
+        const params = new url.URLSearchParams({
+          api_key: apiKey,
+          api_secret: apiSecret,
+          image_url: imageUrl,
+          return_attributes: 'emotion',
+        });
+        const reqUrl = `${baseUrl}?${params.toString()}`;
         const done = this.async();
         // analyze one photo, after each analysis wait `config.facepp.requestFrequency`
         // and save analyzed data to analyzedData.
-        analyzePhoto(facePlusPlusUrl, imageUrl, () => setTimeout(done, config.request.frequency));
+        analyzePhoto(reqUrl, imageUrl, () => setTimeout(done, config.request.frequency));
       }, () => db.savePhotos(analyzedData)); // when all done save to db
     },
   };
