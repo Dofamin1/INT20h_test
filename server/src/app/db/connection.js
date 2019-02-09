@@ -16,8 +16,7 @@ module.exports = {
     )
       .then(() => {
         console.log('Connected to Database');
-        // TODO: create production and development enviroments
-        mongoose.set('debug', true); // turn on debug
+        // mongoose.set('debug', true); // turn on debug
       }).catch((err) => {
         console.log('Not Connected to Database ERROR! ', err);
       });

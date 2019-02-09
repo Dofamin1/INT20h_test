@@ -46,7 +46,7 @@ const photoHandler = function photoHandler(photo) {
   });
   const reqUrl = `${baseUrl}?${params.toString()}`;
   const done = this.async(); // should be called after async operation is finished
-  const callAfterEachRequest = () => setTimeout(done, config.request.frequency);
+  const callAfterEachRequest = () => setTimeout(done, config.reqFrequency);
   analyzePhoto(reqUrl, photo, callAfterEachRequest);
 };
 

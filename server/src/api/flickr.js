@@ -10,7 +10,6 @@ const makeRequest = reqUrl => axios
   .then(({ data }) => (data.stat === 'ok' ? data : new Error('Error with Flickr API')))
   .catch(e => console.log(e));
 
-
 const flickr = {
   composeImageUrl({
     farm, server, id, secret,
