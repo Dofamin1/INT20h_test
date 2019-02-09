@@ -8,7 +8,6 @@ promiseFinally.shim();
 
 const server = http.createServer(async (req, res) => {
   if (req.method === 'GET' && req.url === '/photos') {
-    // console.log(req.url);
     res.writeHead(200, { 'Content-Type': 'text/html' });
     await db.getPhotos().then((photos) => {
       res.end(JSON.stringify(photos));
