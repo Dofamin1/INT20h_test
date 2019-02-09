@@ -27,11 +27,6 @@ export default {
       selectedEmotion: null,
     };
   },
-  updated() {
-    this.$nextTick(function() {
-      setTimeout(this.$redrawVueMasonry, 100);
-    });
-  },
   created() {
     photoService
       .getPhotos()
@@ -52,8 +47,10 @@ export default {
   methods: {
     changeEmotion(emotion) {
       this.selectedEmotion = emotion;
+      setTimeout(this.$redrawVueMasonry, 100);
     },
     handleError(e) {
+      //TODO:
       window.alert(e);
     },
     handleData({data}) {
