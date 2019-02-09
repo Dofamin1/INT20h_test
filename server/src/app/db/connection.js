@@ -7,17 +7,16 @@ const {
 module.exports = {
   connection: mongoose.connection,
   connect() {
-    mongoose.connect(
-      `mongodb://${username}:${password}@${host}:${port}/${database}`,
-      {
+    mongoose
+      .connect(`mongodb://${username}:${password}@${host}:${port}/${database}`, {
         useNewUrlParser: true,
         poolSize: 1,
-      },
-    )
+      })
       .then(() => {
         console.log('Connected to Database');
         // mongoose.set('debug', true); // turn on debug
-      }).catch((err) => {
+      })
+      .catch((err) => {
         console.log('Not Connected to Database ERROR! ', err);
       });
   },

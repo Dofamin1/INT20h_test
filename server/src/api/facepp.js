@@ -1,10 +1,12 @@
 const axios = require('axios');
 const url = require('url');
 const asyncForEach = require('async-foreach').forEach;
+const db = require('../app/db/main.js');
 const config = require('../config').facepp;
 
 const { apiKey, apiSecret, baseUrl } = config;
 const analyzedData = [];
+const writeToDBAfterAnalysis = () => db.savePhotos(analyzedData);
 
 const getMaximumEmotion = (emotions) => {
   const emotionsValues = Object.values(emotions);
@@ -45,10 +47,10 @@ const photoHandler = function photoHandler(photo) {
 
 module.exports = function facepp(db) {
   return {
-    analyzePhotos: (photos) => {
+    analyzePhotosAndAddToDataBase: (photos) => {
       // Note: next line will be deleted in future. It is for quick testing
-      photos = photos.length > 30 ? photos.slice(0, 30) : photos;
-      asyncForEach(photos, photoHandler, () => db.savePhotos(analyzedData));
+      // photos = photos.length > 30 ? photos.slice(0, 30) : photos;
+      asyncForEach(photos, photoHandler, writeToDBAfterAnalysis);
     },
   };
 };

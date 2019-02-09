@@ -1,7 +1,6 @@
 const helpers = require('../../helpers');
 const connection = require('./connection');
 
-
 connection.connect();
 
 const PhotosModel = require('./models/photos')();
@@ -13,12 +12,13 @@ const db = {
       photo.id = helpers.hash(photo.url);
     });
     await PhotosModel.collection.insertMany(photos, (err, photosSaved) => {
-      // TODO: ERROR handler needed
-      if (err) console.error(err);
-      console.log('Inserted', photosSaved.length);
+      if (err) console.log(err);
+      console.log('Inserted', photosSaved.insertedCount);
     });
   },
-  getPhotos: () => PhotosModel.find({}).lean().exec(),
+  getPhotos: () => PhotosModel.find({}, { _id: 0 })
+    .lean()
+    .exec(),
 };
 
 module.exports = db;
