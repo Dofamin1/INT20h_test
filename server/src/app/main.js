@@ -1,4 +1,4 @@
-const db = require('./db.js');
+const db = require('./db/main.js');
 const facepp = require('../api/facepp.js')(db);
 const flickr = require('../api/flickr.js');
 

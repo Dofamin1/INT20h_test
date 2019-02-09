@@ -1,8 +1,7 @@
-const crypto = require('crypto');
 const mongoose = require('mongoose');
 
-const hash = crypto.createHash('sha1');
-const config = require('../config').db;
+const config = require('../../config').db;
+const helpers = require('../../helpers');
 
 mongoose.connect(`mongodb://${config.username}:${config.password}@${config.host}:${config.port}/${config.database}?authSource=${config.database}&w=1`, { useNewUrlParser: true }).then(() => {
   console.log('Connected to Database');
@@ -15,7 +14,7 @@ mongoose.connect(`mongodb://${config.username}:${config.password}@${config.host}
 const db = {
   savePhotos: (photos) => {
     console.log('saved', photos);
-    const myHash = hash.update('fasfasdf', 'utf-8').digest('hex');
+    console.log(helpers.hash('fasfas'), helpers.hash('fasfas'), helpers.hash('fasfas1'));
   },
 };
 
