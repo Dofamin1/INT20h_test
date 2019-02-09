@@ -13,10 +13,10 @@ const fetchFlickrPhotos = async () => flickr.fetchAllPhotos();
 //   return photos;
 // })
 // .catch(e => console.log(e));
-const photoExists = photo => dbImagesList.indexOf(helpers.hash(photo.url)) === -1;
+const photoExists = photo => dbImagesList.indexOf(helpers.hash(photo.url)) !== -1;
 
 fetchFlickrPhotos((photosFlickr) => {
-  const filteredPhotos = photosFlickr.filter(photo => photoExists(photo));
+  const filteredPhotos = photosFlickr.filter(photo => !photoExists(photo));
   if (filteredPhotos.length > 0) {
     facepp.analyzePhotos(photosFlickr);
   } else {
@@ -29,15 +29,25 @@ fetchFlickrPhotos((photosFlickr) => {
 
 const start = async () => {
   await db.getPhotos().then((photos) => {
-    console.log(photos);
-    // console.log('111', photos[0], photos[0]._id);
-    console.log('111', photos[0].url);
-    // console.log();
-    dbImagesList.push(...photos.map(el => el.url));
-    console.log(dbImagesList);
+    dbImagesList.push(...photos.map(el => helpers.hash(el.url)));
+    console.log('in db now: ', dbImagesList);
   });
   await fetchFlickrPhotos().then((photos) => {
     flickr.addUrlToPhotos(photos);
+    photos.forEach((el) => {
+      console.log(helpers.hash(el.url));
+    });
+    console.log(photos);
+
+    const filteredPhotos = photos.filter(photo => !photoExists(photo));
+    console.log(photos.length, filteredPhotos.length);
+    // return;
+    if (filteredPhotos.length > 0) {
+      facepp.analyzePhotos(filteredPhotos);
+      console.log(filteredPhotos.length);
+    } else {
+      console.log('All images already in db');
+    }
     // console.log(photos);
   });
   // console.log();

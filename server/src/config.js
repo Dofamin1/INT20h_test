@@ -20,7 +20,7 @@ const facepp = {
   apiKey: 'x-q8iByG34SuZR3TFIh6UbWLIkSrrsyM',
   apiSecret: 'ymjVxDrcYSh7Z97g630zVm1WfZkfiokw',
   baseUrl: 'https://api-us.faceplusplus.com/facepp/v3/detect',
-  request: { frequency: 1500 },
+  request: { frequency: 0 },
 };
 
 module.exports = {

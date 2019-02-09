@@ -48,7 +48,7 @@ const flickr = {
   },
   fetchAllPhotos() {
     return Promise.all([
-      // flickr.fetchPhotosByGalleryId('72157706084897874'),
+      flickr.fetchPhotosByGalleryId('72157706084897874'),
       flickr.fetchPhotosByTags(['int20h']),
     ]).then((data) => {
       const reducer = (accumulator, currentValue) => [

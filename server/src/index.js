@@ -2,13 +2,22 @@ const promiseFinally = require('promise.prototype.finally');
 const http = require('http');
 const config = require('./config').general;
 const app = require('./app/main.js');
+const db = require('./app/db/main.js');
 
 promiseFinally.shim();
 
-const server = http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end('Hello, %your_name%.');
+const server = http.createServer(async (req, res) => {
+  if (req.method === 'GET' && req.url === '/photos') {
+    // console.log(req.url);
+    res.writeHead(200, { 'Content-Type': 'text/html' });
+    await db.getPhotos().then((photos) => {
+      res.end(JSON.stringify(photos));
+    });
+  } else {
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'text/plain');
+    res.end('Hello, %your_name%.');
+  }
 });
 
 server.on('clientError', (err, socket) => {
