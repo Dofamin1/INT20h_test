@@ -5,12 +5,7 @@ const removeDuplicates = ({ array, prop }) => (
   )
 );
 
-const arrayColumn = (arr, col, colNum) => (
-  arr.filter(x => ((arr.indexOf(x) % colNum) === col - 1 ? x : false))
-);
-
 
 export default {
   removeDuplicates,
-  arrayColumn,
 };

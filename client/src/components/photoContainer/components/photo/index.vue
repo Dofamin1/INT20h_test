@@ -27,12 +27,8 @@ export default {
 };
 </script>
 
-<style scoped>
-.photo{
-  padding-top: 10px;
-}
-.photo > img{
-  width: 100%;
-  vertical-align: middle;
-}
+<style>
+ .photo{
+   margin: 10px;
+  }
 </style>
