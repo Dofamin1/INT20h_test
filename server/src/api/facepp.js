@@ -24,6 +24,10 @@ const analyzePhoto = (url, imageUrl, cb) => {
       const emotionList = data.faces.length === 0
         ? []
         : data.faces.map(el => el.attributes.emotion);
+      // remove attributes.emotion because it is not needed already
+      data.faces.forEach((el) => {
+        delete el.attributes.emotion;
+      });
       analyzedData.push({
         faces: data.faces,
         url: imageUrl,
