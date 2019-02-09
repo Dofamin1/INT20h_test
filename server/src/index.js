@@ -1,7 +1,7 @@
 const promiseFinally = require('promise.prototype.finally');
 const http = require('http');
 const config = require('./config').general;
-const app = require('./src/main.js');
+const app = require('./app/main.js');
 
 promiseFinally.shim();
 

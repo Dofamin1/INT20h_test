@@ -3,10 +3,11 @@ const general = {
 };
 
 const firebase = {
-  apiKey: 'AIzaSyBrS-5hnPHKAzZhIbjv52j2nNYZLi9HDn4',
-  authDomain: 'int20h-c53da.firebaseapp.com',
-  databaseURL: 'https://int20h-c53da.firebaseio.com',
-  storageBucket: 'bucket.appspot.com',
+  apiKey: 'AIzaSyCyaz-C8-KHmRPBf2c4SNl7T6KO9P1GncY',
+  authDomain: 'int20h-test.firebaseapp.com',
+  databaseURL: 'https://int20h-test.firebaseio.com',
+  storageBucket: 'int20h-test.appspot.com',
+  projectId: 'int20h-test',
 };
 
 const flickr = {
