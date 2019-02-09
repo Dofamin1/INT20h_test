@@ -17,8 +17,14 @@ const flickr = {
   }) {
     return `https://farm${farm}.staticflickr.com/${server}/${id}_${secret}.jpg`;
   },
+  addUrlToPhotos(photos) {
+    return photos.map((photo) => {
+      photo.url = flickr.composeImageUrl(photo);
+      return photo;
+    });
+  },
 
-  getPhotosByGalleryId(galleryId) {
+  fetchPhotosByGalleryId(galleryId) {
     const params = new url.URLSearchParams({
       api_key: apiKey,
       format: 'json',
@@ -29,7 +35,7 @@ const flickr = {
     const reqUrl = `${baseUrl}?${params.toString()}`;
     return makeRequest(reqUrl);
   },
-  getPhotosByTags(tags) {
+  fetchPhotosByTags(tags) {
     const params = new url.URLSearchParams({
       api_key: apiKey,
       format: 'json',
@@ -40,10 +46,10 @@ const flickr = {
     const reqUrl = `${baseUrl}?${params.toString()}`;
     return makeRequest(reqUrl);
   },
-  getAllPhotos() {
+  fetchAllPhotos() {
     return Promise.all([
-      // flickr.getPhotosByGalleryId('72157706084897874'),
-      flickr.getPhotosByTags(['int20h']),
+      // flickr.fetchPhotosByGalleryId('72157706084897874'),
+      flickr.fetchPhotosByTags(['int20h']),
     ]).then((data) => {
       const reducer = (accumulator, currentValue) => [
         ...accumulator,

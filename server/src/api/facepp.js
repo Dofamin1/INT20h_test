@@ -43,20 +43,20 @@ module.exports = function facepp(db) {
   return {
     analyzePhotos: (photos) => {
       // Note: next line will be deleted in future. It is for quick testing
-      photos = photos.length > 30 ? photos.slice(0, 3) : photos; // leave only 3 elements
+      photos = photos.length > 1 ? photos.slice(0, 1) : photos; // leave only 3 elements
       asyncForEach(photos, function photoHandler(photo) {
-        const imageUrl = flickr.composeImageUrl(photo);
+        // const imageUrl = flickr.composeImageUrl(photo);
         const params = new url.URLSearchParams({
           api_key: apiKey,
           api_secret: apiSecret,
-          image_url: imageUrl,
+          image_url: photo.url,
           return_attributes: 'emotion',
         });
         const reqUrl = `${baseUrl}?${params.toString()}`;
         const done = this.async();
         // analyze one photo, after each analysis wait `config.facepp.requestFrequency`
         // and save analyzed data to analyzedData.
-        analyzePhoto(reqUrl, imageUrl, () => setTimeout(done, config.request.frequency));
+        analyzePhoto(reqUrl, photo.url, () => setTimeout(done, config.request.frequency));
       }, () => db.savePhotos(analyzedData)); // when all done save to db
     },
   };
