@@ -1,8 +1,7 @@
 <template>
   <div>
-    <div>Whole page</div>
-    <emotionFilter />
-    <photoContainer />
+    <emotionFilter/>
+    <photoContainer/>
   </div>
 </template>
 

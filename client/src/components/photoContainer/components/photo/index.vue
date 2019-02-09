@@ -1,9 +1,6 @@
 <template>
   <div class="photo">
-    <img
-      :src="photo.url"
-      :alt="'Фото не завантажилось'"
-    >
+    <img :src="photo.url" :alt="'Фото не завантажилось'">
   </div>
 </template>
 
@@ -20,7 +17,7 @@ export default {
 </script>
 
 <style>
- .photo{
-   margin: 10px;
-  }
+.photo {
+  margin: 10px;
+}
 </style>
