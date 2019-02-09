@@ -11,7 +11,7 @@
 
 <script>
 import photo from './components/photo/index.vue';
-import flickr from '../../api/flickr';
+import photoService from "../../api/photoService.js"
 
 export default {
   name: 'PhotoContainer',
@@ -24,18 +24,15 @@ export default {
     };
   },
   created() {
-    flickr
-      .getAllPhotos()
-      .then(response => (response instanceof Error
-        ? this.handleError(response)
-        : this.handleData(response)))
-      .catch(e => this.handleError(e));
+    photoService.getPhotos()
+     .then(this.handleData)
+     .catch(this.handleError);
   },
   methods: {
     handleError(e) {
       window.alert(e);
     },
-    handleData(data) {
+    handleData({data}) {
       this.photos = data;
     },
   },
