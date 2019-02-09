@@ -1,18 +1,21 @@
 <template>
-      <div  horizontal-order="true" class="centerAlign" fit-width="true"  v-masonry transition-duration="0.3s" item-selector=".item">
-        <div v-masonry-tile class="item" v-for="photo in photos">
-          <photo
-              :key="photo.id"
-              :photo="photo"
-            />
-        </div>
-      </div>
+  <div
+    horizontal-order="true"
+    class="centerAlign"
+    fit-width="true"
+    v-masonry
+    transition-duration="0.3s"
+    item-selector=".item"
+  >
+    <div v-masonry-tile class="item" v-for="photo in photosToDisplay">
+      <photo :key="photo.id" :photo="photo"/>
+    </div>
+  </div>
 </template>
 
 <script>
 import photo from './components/photo/index.vue';
-import photoService from "../../api/photoService.js"
-
+import photoService from '../../api/photoService.js';
 export default {
   name: 'PhotoContainer',
   components: {
@@ -21,14 +24,35 @@ export default {
   data() {
     return {
       photos: [],
+      selectedEmotion: null,
     };
   },
+  updated() {
+    this.$nextTick(function() {
+      setTimeout(this.$redrawVueMasonry, 100);
+    });
+  },
   created() {
-    photoService.getPhotos()
-     .then(this.handleData)
-     .catch(this.handleError);
+    photoService
+      .getPhotos()
+      .then(this.handleData)
+      .catch(this.handleError);
+    this.$vueEventBus.$on('change_emotion', this.changeEmotion);
+  },
+  computed: {
+    photosByEmotion() {
+      const filterByEmotion = photo =>
+        photo.faces.some(face => face.emotion == this.selectedEmotion);
+      return this.photos.filter(filterByEmotion);
+    },
+    photosToDisplay() {
+      return this.selectedEmotion ? this.photosByEmotion : this.photos;
+    },
   },
   methods: {
+    changeEmotion(emotion) {
+      this.selectedEmotion = emotion;
+    },
     handleError(e) {
       window.alert(e);
     },
@@ -40,7 +64,7 @@ export default {
 </script>
 
 <style >
-.centerAlign{
-  margin: auto
-} 
+.centerAlign {
+  margin: auto;
+}
 </style>
