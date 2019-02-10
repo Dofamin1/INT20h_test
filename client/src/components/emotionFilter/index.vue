@@ -7,22 +7,12 @@
 </template>
 
 <script>
-const emotionsList = [
-  {value: 'anger', text: 'anger'},
-  {value: 'disgust', text: 'disgust'},
-  {value: 'fear', text: 'fear'},
-  {value: 'happiness', text: 'happiness'},
-  {value: 'neutral', text: 'neutral'},
-  {value: 'sadness', text: 'sadness'},
-  {value: 'surprise', text: 'surprise'},
-  {value: null, text: 'all photos'},
-];
-import {mapState, mapMutations} from 'vuex';
+import {mapState, mapMutations, mapGetters} from 'vuex';
 export default {
   name: 'EmotionFilter',
   computed: {
+    ...mapGetters(['emotionsList']),
     ...mapState({selectedEmotion: state => state.selectedEmotion}),
-    emotionsList: () => emotionsList,
     emotion: {
       get() {
         return this.selectedEmotion;

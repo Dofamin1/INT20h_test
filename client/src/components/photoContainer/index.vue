@@ -19,8 +19,7 @@
 
 <script>
 import photo from './components/photo/index.vue';
-import photoService from '../../api/photoService.js';
-import {mapState} from 'vuex';
+import {mapState, mapActions} from 'vuex';
 
 export default {
   name: 'PhotoContainer',
@@ -29,19 +28,18 @@ export default {
   },
   data() {
     return {
-      photos: [],
       pageNumber: 0,
       photosPerPage: 10,
     };
   },
   created() {
-    photoService
-      .getPhotos()
-      .then(this.handleData)
-      .catch(this.handleError);
+    this.getPhotos();
   },
   computed: {
-    ...mapState({selectedEmotion: state => state.selectedEmotion}),
+    ...mapState({
+      selectedEmotion: state => state.selectedEmotion,
+      photos: state => state.photos,
+    }),
     photosByEmotion() {
       const filterByEmotion = photo =>
         photo.faces.some(face => face.emotion == this.selectedEmotion);
@@ -61,13 +59,7 @@ export default {
     },
   },
   methods: {
-    handleError(e) {
-      //TODO:
-      window.alert(e);
-    },
-    handleData({data}) {
-      this.photos = data;
-    },
+    ...mapActions(['getPhotos']),
     nextPage() {
       this.pageNumber++;
     },
