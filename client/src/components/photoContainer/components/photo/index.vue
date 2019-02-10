@@ -1,10 +1,6 @@
 <template>
   <div class="photo">
-    <div>{{ photo.title }}</div>
-    <img
-      :src="src"
-      :alt="photo.title"
-    >
+    <img :src="photo.url" :alt="'Фото не завантажилось'">
   </div>
 </template>
 
@@ -17,16 +13,11 @@ export default {
       type: Object,
     },
   },
-  computed: {
-    src() {
-      const {
-        farm, server, id, secret,
-      } = this.photo;
-      return `https://farm${farm}.staticflickr.com/${server}/${id}_${secret}.jpg`;
-    },
-  },
 };
 </script>
 
-<style >
+<style>
+.photo {
+  margin: 10px;
+}
 </style>
