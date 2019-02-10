@@ -20,6 +20,8 @@
 <script>
 import photo from './components/photo/index.vue';
 import photoService from '../../api/photoService.js';
+import {mapState} from 'vuex';
+
 export default {
   name: 'PhotoContainer',
   components: {
@@ -28,7 +30,6 @@ export default {
   data() {
     return {
       photos: [],
-      selectedEmotion: null,
       pageNumber: 0,
       photosPerPage: 10,
     };
@@ -41,6 +42,7 @@ export default {
     this.$vueEventBus.$on('change_emotion', this.changeEmotion);
   },
   computed: {
+    ...mapState({selectedEmotion: state => state.selectedEmotion}),
     photosByEmotion() {
       const filterByEmotion = photo =>
         photo.faces.some(face => face.emotion == this.selectedEmotion);
