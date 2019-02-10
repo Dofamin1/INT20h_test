@@ -1,6 +1,6 @@
 <template>
   <div class="photo">
-    <img :src="url" :alt="'Фото не завантажилось'">
+    <img v-img :src="url" :alt="'Фото не завантажилось'">
   </div>
 </template>
 
