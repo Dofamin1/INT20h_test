@@ -30,8 +30,7 @@ const getUpdates = async () => {
 
 const start = async () => {
   await fetchPhotosFromMongodb();
-  getUpdates();
-  // setInterval(await getUpdates, updateFrequency);
+  setInterval(await getUpdates, updateFrequency);
 };
 
 module.exports = { start };

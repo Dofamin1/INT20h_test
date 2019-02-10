@@ -14,20 +14,23 @@ const getMaximumEmotion = (emotions) => {
   const maxEmotionName = Object.keys(emotions).find(key => emotions[key] === maxEmotionValue);
   return maxEmotionName;
 };
+const calculateEmotions = ({ data }) => data.faces.map((face) => {
+  const attributes = face.attributes;
+  if (attributes) {
+    face.emotion = getMaximumEmotion(attributes.emotion);
+    delete face.attributes;
+  }
+  return face;
+});
 
 const analyzePhoto = (reqUrl, photo, callback) => {
   axios
     .post(reqUrl, { responseType: 'json' })
-    .then(({ data }) => {
-      data.faces.forEach((face) => {
-        face.emotion = getMaximumEmotion(face.attributes.emotion);
-        delete face.attributes;
-      });
-      analyzedData.push({
-        faces: data.faces,
-        url: photo.url,
-      });
-    })
+    .then(calculateEmotions)
+    .then(faces => analyzedData.push({
+      faces,
+      url: photo.url,
+    }))
     .then(callback)
     .catch(e => console.log(e.message, e.response ? e.response.data : ''));
 };
@@ -48,8 +51,6 @@ const photoHandler = function photoHandler(photo) {
 module.exports = function facepp(db) {
   return {
     analyzePhotosAndAddToDataBase: (photos) => {
-      // Note: next line will be deleted in future. It is for quick testing
-      // photos = photos.length > 30 ? photos.slice(0, 30) : photos;
       asyncForEach(photos, photoHandler, writeToDBAfterAnalysis);
     },
   };
