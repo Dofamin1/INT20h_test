@@ -8,7 +8,7 @@
       transition-duration="0.3s"
       item-selector=".item"
     >
-      <div v-masonry-tile class="item" v-for="photo in paginatedPhotos">
+      <div v-masonry-tile class="item" v-for="photo in paginatedPhotos" :key="photo.id" >
         <photo :key="photo.id" :url="photo.url"/>
       </div>
     </div>
