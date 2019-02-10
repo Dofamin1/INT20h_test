@@ -35,6 +35,5 @@ export default {
   -webkit-appearance: none;
   -webkit-box-shadow: none;
   box-shadow: none;
-  /* border: 1px solid black */
 }
 </style>

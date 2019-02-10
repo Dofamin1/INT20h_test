@@ -9,6 +9,7 @@ const store = new Vuex.Store({
     photos: [],
     selectedEmotion: null,
     pageNumber: 0,
+    photosPerPage: 10,
   },
   mutations: {
     changeEmotion(state, emotion) {
@@ -19,10 +20,10 @@ const store = new Vuex.Store({
     setPhotos(state, photos) {
       state.photos = photos;
     },
-    incrementPages(state) {
+    nextPage(state) {
       state.pageNumber++;
     },
-    decrementPages(state) {
+    prevPage(state) {
       state.pageNumber--;
     },
   },
@@ -31,7 +32,8 @@ const store = new Vuex.Store({
       const emotionsList = [{ value: null, text: 'All photos' }];
       state.photos.forEach(({ faces }) => {
         faces.forEach(({ emotion }) => {
-          if (emotion && !emotionsList.find(e => e.value == emotion)) emotionsList.push({ value: emotion, text: emotion });
+          const emotionNotExist = emotion && !emotionsList.find(e => e.value == emotion);
+          if (emotionNotExist) emotionsList.push({ value: emotion, text: emotion });
         });
       });
       return emotionsList;

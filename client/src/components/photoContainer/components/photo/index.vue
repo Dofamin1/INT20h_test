@@ -1,6 +1,6 @@
 <template>
   <div class="photo">
-    <img :src="photo.url" :alt="'Фото не завантажилось'">
+    <img :src="url" :alt="'Фото не завантажилось'">
   </div>
 </template>
 
@@ -8,9 +8,9 @@
 export default {
   name: 'Photo',
   props: {
-    photo: {
+    url: {
       required: true,
-      type: Object,
+      type: String,
     },
   },
 };

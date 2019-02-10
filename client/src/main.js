@@ -8,7 +8,6 @@ import 'bootstrap-vue/dist/bootstrap-vue.css';
 import store from './vuex/store.js';
 
 Vue.config.productionTip = false;
-Vue.prototype.$vueEventBus = new Vue();
 
 Vue.use(BootstrapVue);
 Vue.use(VueMasonryPlugin);

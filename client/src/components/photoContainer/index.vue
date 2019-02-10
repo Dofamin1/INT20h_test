@@ -8,7 +8,7 @@
     item-selector=".item"
   >
     <div v-masonry-tile class="item" v-for="photo in paginatedPhotos">
-      <photo :key="photo.id" :photo="photo"/>
+      <photo :key="photo.id" :url="photo.url"/>
     </div>
     <div v-if="pageCount > 1">
       <button class="leftFixed" :disabled="pageNumber === 0" @click="prevPage">Previous</button>
@@ -26,11 +26,6 @@ export default {
   components: {
     photo,
   },
-  data() {
-    return {
-      photosPerPage: 10,
-    };
-  },
   created() {
     this.getPhotos();
   },
@@ -39,6 +34,7 @@ export default {
       selectedEmotion: state => state.selectedEmotion,
       photos: state => state.photos,
       pageNumber: state => state.pageNumber,
+      photosPerPage: state => state.photosPerPage,
     }),
     photosByEmotion() {
       const filterByEmotion = photo =>
@@ -60,13 +56,7 @@ export default {
   },
   methods: {
     ...mapActions(['getPhotos']),
-    ...mapMutations(['incrementPages', 'decrementPages']),
-    nextPage() {
-      this.incrementPages();
-    },
-    prevPage() {
-      this.decrementPages();
-    },
+    ...mapMutations(['prevPage', 'nextPage']),
   },
 };
 </script>
