@@ -19,7 +19,7 @@
 
 <script>
 import photo from './components/photo/index.vue';
-import {mapState, mapActions} from 'vuex';
+import {mapState, mapActions, mapMutations} from 'vuex';
 
 export default {
   name: 'PhotoContainer',
@@ -28,7 +28,6 @@ export default {
   },
   data() {
     return {
-      pageNumber: 0,
       photosPerPage: 10,
     };
   },
@@ -39,6 +38,7 @@ export default {
     ...mapState({
       selectedEmotion: state => state.selectedEmotion,
       photos: state => state.photos,
+      pageNumber: state => state.pageNumber,
     }),
     photosByEmotion() {
       const filterByEmotion = photo =>
@@ -60,11 +60,12 @@ export default {
   },
   methods: {
     ...mapActions(['getPhotos']),
+    ...mapMutations(['incrementPages', 'decrementPages']),
     nextPage() {
-      this.pageNumber++;
+      this.incrementPages();
     },
     prevPage() {
-      this.pageNumber--;
+      this.decrementPages();
     },
   },
 };

@@ -8,14 +8,22 @@ const store = new Vuex.Store({
   state: {
     photos: [],
     selectedEmotion: null,
+    pageNumber: 0,
   },
   mutations: {
     changeEmotion(state, emotion) {
+      state.pageNumber = 0;
       state.selectedEmotion = emotion;
       this._vm.$nextTick(() => setTimeout(this._vm.$redrawVueMasonry, 500));
     },
     setPhotos(state, photos) {
       state.photos = photos;
+    },
+    incrementPages(state) {
+      state.pageNumber++;
+    },
+    decrementPages(state) {
+      state.pageNumber--;
     },
   },
   getters: {
