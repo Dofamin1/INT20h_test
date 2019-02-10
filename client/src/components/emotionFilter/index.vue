@@ -17,24 +17,23 @@ const emotionsList = [
   {value: 'surprise', text: 'surprise'},
   {value: null, text: 'all photos'},
 ];
+import {mapState, mapMutations} from 'vuex';
 export default {
   name: 'EmotionFilter',
-  data() {
-    return {
-      selectedEmotion: null,
-    };
-  },
   computed: {
+    ...mapState({selectedEmotion: state => state.selectedEmotion}),
     emotionsList: () => emotionsList,
     emotion: {
       get() {
         return this.selectedEmotion;
       },
       set(emotion) {
-        this.selectedEmotion = emotion;
-        this.$vueEventBus.$emit('change_emotion', emotion);
+        this.changeEmotion(emotion);
       },
     },
+  },
+  methods: {
+    ...mapMutations(['changeEmotion']),
   },
 };
 </script>

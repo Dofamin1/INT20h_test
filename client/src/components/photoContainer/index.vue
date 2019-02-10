@@ -39,7 +39,6 @@ export default {
       .getPhotos()
       .then(this.handleData)
       .catch(this.handleError);
-    this.$vueEventBus.$on('change_emotion', this.changeEmotion);
   },
   computed: {
     ...mapState({selectedEmotion: state => state.selectedEmotion}),
@@ -62,10 +61,6 @@ export default {
     },
   },
   methods: {
-    changeEmotion(emotion) {
-      this.selectedEmotion = emotion;
-      this.$nextTick(() => setTimeout(this.$redrawVueMasonry, 500));
-    },
     handleError(e) {
       //TODO:
       window.alert(e);

@@ -9,7 +9,12 @@ const store = new Vuex.Store({
     emotions: [],
     selectedEmotion: null,
   },
-  mutations: {},
+  mutations: {
+    changeEmotion(state, emotion) {
+      state.selectedEmotion = emotion;
+      this._vm.$nextTick(() => setTimeout(this._vm.$redrawVueMasonry, 500));
+    },
+  },
   getters: {},
   actions: {},
 });
