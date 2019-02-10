@@ -1,29 +1,25 @@
 const promiseFinally = require('promise.prototype.finally');
-const http = require('http');
+const path = require('path');
+const express = require('express');
+
+const server = express();
 const config = require('./config').general;
 const app = require('./app/main.js');
 const db = require('./app/db/main.js');
 
 promiseFinally.shim();
 
-const server = http.createServer(async (req, res) => {
-  if (req.method === 'GET' && req.url === '/photos') {
-    res.writeHead(200, { 'Content-Type': 'text/html' });
-    await db.getPhotos().then((photos) => {
-      res.end(JSON.stringify(photos));
-    });
-  } else {
-    res.writeHead(200, { 'Content-Type': 'text/plain' });
-    res.end('Hello, %your_name%.');
-  }
+server.get('/', (req, res) => {
+  server.use(express.static(path.join(__dirname, '../public')));
+  res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
-server.on('clientError', (err, res) => {
-  res.end('HTTP/1.1 400 Bad Request\r\n\r\n');
+server.get('/photos', async (req, res) => {
+  await db.getPhotos().then((photos) => {
+    res.send(JSON.stringify(photos));
+  });
 });
 
-server.listen(config.port, () => {
-  console.log(`Listening on port ${config.port}!`);
-});
+server.listen(config.port, () => console.log(`Example app listening on port ${config.port}!`))
 
 app.start();
