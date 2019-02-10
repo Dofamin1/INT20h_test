@@ -47,7 +47,7 @@ export default {
   methods: {
     changeEmotion(emotion) {
       this.selectedEmotion = emotion;
-      setTimeout(this.$redrawVueMasonry, 100);
+      this.$nextTick(() => setTimeout(this.$redrawVueMasonry, 500));
     },
     handleError(e) {
       //TODO:
