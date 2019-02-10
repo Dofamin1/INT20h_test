@@ -7,8 +7,12 @@
     transition-duration="0.3s"
     item-selector=".item"
   >
-    <div v-masonry-tile class="item" v-for="photo in photosToDisplay">
+    <div v-masonry-tile class="item" v-for="photo in paginatedPhotos">
       <photo :key="photo.id" :photo="photo"/>
+    </div>
+    <div v-if="pageCount > 1">
+      <button class="leftFixed" :disabled="pageNumber === 0" @click="prevPage">Previous</button>
+      <button class="rigthFixed" :disabled="pageNumber >= pageCount -1" @click="nextPage">Next</button>
     </div>
   </div>
 </template>
@@ -25,6 +29,8 @@ export default {
     return {
       photos: [],
       selectedEmotion: null,
+      pageNumber: 0,
+      photosPerPage: 10,
     };
   },
   created() {
@@ -43,6 +49,15 @@ export default {
     photosToDisplay() {
       return this.selectedEmotion ? this.photosByEmotion : this.photos;
     },
+    paginatedPhotos() {
+      const start = this.pageNumber * this.photosPerPage,
+        end = start + this.photosPerPage;
+      return this.photosToDisplay.slice(start, end);
+    },
+    pageCount() {
+      const photosCount = this.photosToDisplay.length;
+      return Math.floor(photosCount / this.photosPerPage);
+    },
   },
   methods: {
     changeEmotion(emotion) {
@@ -56,6 +71,12 @@ export default {
     handleData({data}) {
       this.photos = data;
     },
+    nextPage() {
+      this.pageNumber++;
+    },
+    prevPage() {
+      this.pageNumber--;
+    },
   },
 };
 </script>
@@ -63,5 +84,15 @@ export default {
 <style >
 .centerAlign {
   margin: auto;
+}
+.rigthFixed {
+  position: fixed;
+  top: 50%;
+  right: 30px;
+}
+.leftFixed {
+  position: fixed;
+  top: 50%;
+  left: 30px;
 }
 </style>
