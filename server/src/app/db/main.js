@@ -11,9 +11,9 @@ const db = {
     photos.forEach((photo) => {
       photo.id = helpers.hash(photo.url);
     });
-    await PhotosModel.collection.insertMany(photos, (err, photosSaved) => {
+    await PhotosModel.collection.insertMany(photos, (err) => {
       if (err) console.log(err);
-      console.log('Inserted', photosSaved.insertedCount);
+      console.log('Inserted');
     });
   },
   getPhotos: () => PhotosModel.find({}, { _id: 0 })

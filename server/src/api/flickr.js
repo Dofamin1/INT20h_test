@@ -53,7 +53,10 @@ const flickr = {
       flickr.fetchPhotosByGalleryId('72157674388093532'),
       flickr.fetchPhotosByTags(['int20h']),
     ]).then((data) => {
-      const reducer = (accumulator, currentValue) => [...accumulator, ...currentValue.photos.photo];
+      const reducer = (accumulator, currentValue) => {
+        const newPhoto = currentValue && currentValue.photos ? currentValue.photos.photo : []
+        return [...accumulator, ...newPhoto];
+      };
       const allPhotos = data.reduce(reducer, []);
       const photosWithoutDuplicates = helpers.removeDuplicates({
         array: allPhotos,

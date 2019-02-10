@@ -1,12 +1,14 @@
 const axios = require('axios');
 const url = require('url');
 const asyncForEach = require('async-foreach').forEach;
-const db = require('../app/db/main.js');
 const config = require('../config').facepp;
 
 const { apiKey, apiSecret, baseUrl } = config;
 const analyzedData = [];
-const writeToDBAfterAnalysis = () => db.savePhotos(analyzedData);
+const writeToDBAfterAnalysis = (db, info) => { 
+  info.analyzed = true;
+  db.savePhotos(analyzedData);
+};
 
 const getMaximumEmotion = (emotions) => {
   const emotionsValues = Object.values(emotions);
@@ -15,7 +17,7 @@ const getMaximumEmotion = (emotions) => {
   return maxEmotionName;
 };
 const calculateEmotions = ({ data }) => data.faces.map((face) => {
-  const attributes = face.attributes;
+  const { attributes } = face;
   if (attributes) {
     face.emotion = getMaximumEmotion(attributes.emotion);
     delete face.attributes;
@@ -50,8 +52,8 @@ const photoHandler = function photoHandler(photo) {
 
 module.exports = function facepp(db) {
   return {
-    analyzePhotosAndAddToDataBase: (photos) => {
-      asyncForEach(photos, photoHandler, writeToDBAfterAnalysis);
+    analyzePhotosAndAddToDataBase: (photos, info) => {
+      asyncForEach(photos, photoHandler, () => writeToDBAfterAnalysis(db, info));
     },
   };
 };

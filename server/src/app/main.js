@@ -1,15 +1,17 @@
 const db = require('./db/main.js');
 
-const updateFrequency = 1000000;
+const flickrConfig = require('../config.js').flickr;
 const { getPhotoId } = require('../helpers.js');
 const facepp = require('../api/facepp.js')(db);
 const flickr = require('../api/flickr.js');
 
-const mongodbPhotosIDList = [];
+const info = { analyzed: true };
+let mongodbPhotosIDList = [];
 
-const photoIsNew = photo => !mongodbPhotosIDList.includes(getPhotoId(photo));
+const photoIsNew = photo => mongodbPhotosIDList.indexOf(getPhotoId(photo)) === -1;	
 
 const fetchPhotosFromMongodb = () => db.getPhotos().then((photos) => {
+  mongodbPhotosIDList = [];
   const photosIds = photos.map(getPhotoId);
   mongodbPhotosIDList.push(...photosIds);
 });
@@ -20,17 +22,18 @@ const fetchNewPhotos = async () => {
 };
 
 const getUpdates = async () => {
+  await fetchPhotosFromMongodb();
   const newPhotos = await fetchNewPhotos();
-  if (newPhotos.length > 0) {
-    facepp.analyzePhotosAndAddToDataBase(newPhotos);
+  if (newPhotos.length > 0 && info.analyzed) {
+    info.analyzed = false;
+    facepp.analyzePhotosAndAddToDataBase(newPhotos, info);
   } else {
     console.log('Nothing new found.');
   }
 };
 
 const start = async () => {
-  await fetchPhotosFromMongodb();
-  setInterval(await getUpdates, updateFrequency);
+  setInterval(() => getUpdates(), flickrConfig.updateFrequency);
 };
 
 module.exports = { start };
