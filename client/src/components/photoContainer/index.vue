@@ -7,34 +7,35 @@
     transition-duration="0.3s"
     item-selector=".item"
   >
-    <div v-masonry-tile class="item" v-for="photo in photosToDisplay">
-      <photo :key="photo.id" :photo="photo"/>
+    <div v-masonry-tile class="item" v-for="photo in paginatedPhotos">
+      <photo :key="photo.id" :url="photo.url"/>
+    </div>
+    <div v-if="pageCount > 1">
+      <button class="leftFixed" :disabled="pageNumber === 0" @click="prevPage">Previous</button>
+      <button class="rigthFixed" :disabled="pageNumber >= pageCount -1" @click="nextPage">Next</button>
     </div>
   </div>
 </template>
 
 <script>
 import photo from './components/photo/index.vue';
-import photoService from '../../api/photoService.js';
+import {mapState, mapActions, mapMutations} from 'vuex';
+
 export default {
   name: 'PhotoContainer',
   components: {
     photo,
   },
-  data() {
-    return {
-      photos: [],
-      selectedEmotion: null,
-    };
-  },
   created() {
-    photoService
-      .getPhotos()
-      .then(this.handleData)
-      .catch(this.handleError);
-    this.$vueEventBus.$on('change_emotion', this.changeEmotion);
+    this.getPhotos();
   },
   computed: {
+    ...mapState({
+      selectedEmotion: state => state.selectedEmotion,
+      photos: state => state.photos,
+      pageNumber: state => state.pageNumber,
+      photosPerPage: state => state.photosPerPage,
+    }),
     photosByEmotion() {
       const filterByEmotion = photo =>
         photo.faces.some(face => face.emotion == this.selectedEmotion);
@@ -43,19 +44,19 @@ export default {
     photosToDisplay() {
       return this.selectedEmotion ? this.photosByEmotion : this.photos;
     },
+    paginatedPhotos() {
+      const start = this.pageNumber * this.photosPerPage,
+        end = start + this.photosPerPage;
+      return this.photosToDisplay.slice(start, end);
+    },
+    pageCount() {
+      const photosCount = this.photosToDisplay.length;
+      return Math.floor(photosCount / this.photosPerPage);
+    },
   },
   methods: {
-    changeEmotion(emotion) {
-      this.selectedEmotion = emotion;
-      this.$nextTick(() => setTimeout(this.$redrawVueMasonry, 500));
-    },
-    handleError(e) {
-      //TODO:
-      window.alert(e);
-    },
-    handleData({data}) {
-      this.photos = data;
-    },
+    ...mapActions(['getPhotos']),
+    ...mapMutations(['prevPage', 'nextPage']),
   },
 };
 </script>
@@ -63,5 +64,15 @@ export default {
 <style >
 .centerAlign {
   margin: auto;
+}
+.rigthFixed {
+  position: fixed;
+  top: 50%;
+  right: 30px;
+}
+.leftFixed {
+  position: fixed;
+  top: 50%;
+  left: 30px;
 }
 </style>

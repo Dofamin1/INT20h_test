@@ -7,34 +7,23 @@
 </template>
 
 <script>
-const emotionsList = [
-  {value: 'anger', text: 'anger'},
-  {value: 'disgust', text: 'disgust'},
-  {value: 'fear', text: 'fear'},
-  {value: 'happiness', text: 'happiness'},
-  {value: 'neutral', text: 'neutral'},
-  {value: 'sadness', text: 'sadness'},
-  {value: 'surprise', text: 'surprise'},
-  {value: null, text: 'all photos'},
-];
+import {mapState, mapMutations, mapGetters} from 'vuex';
 export default {
   name: 'EmotionFilter',
-  data() {
-    return {
-      selectedEmotion: null,
-    };
-  },
   computed: {
-    emotionsList: () => emotionsList,
+    ...mapGetters(['emotionsList']),
+    ...mapState({selectedEmotion: state => state.selectedEmotion}),
     emotion: {
       get() {
         return this.selectedEmotion;
       },
       set(emotion) {
-        this.selectedEmotion = emotion;
-        this.$vueEventBus.$emit('change_emotion', emotion);
+        this.changeEmotion(emotion);
       },
     },
+  },
+  methods: {
+    ...mapMutations(['changeEmotion']),
   },
 };
 </script>
@@ -46,6 +35,5 @@ export default {
   -webkit-appearance: none;
   -webkit-box-shadow: none;
   box-shadow: none;
-  /* border: 1px solid black */
 }
 </style>
