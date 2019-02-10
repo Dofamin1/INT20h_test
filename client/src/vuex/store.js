@@ -2,7 +2,7 @@ import Vuex from 'vuex';
 import Vue from 'vue';
 import photoService from '../api/photoService.js';
 
-Vue.use(Vuex); // TODO: name
+Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state: {

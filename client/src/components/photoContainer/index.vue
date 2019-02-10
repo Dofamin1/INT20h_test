@@ -1,18 +1,32 @@
 <template>
-  <div
-    horizontal-order="true"
-    class="centerAlign"
-    fit-width="true"
-    v-masonry
-    transition-duration="0.3s"
-    item-selector=".item"
-  >
-    <div v-masonry-tile class="item" v-for="photo in paginatedPhotos">
-      <photo :key="photo.id" :url="photo.url"/>
+  <div>
+    <div
+      horizontal-order="true"
+      class="centerAlign"
+      fit-width="true"
+      v-masonry
+      transition-duration="0.3s"
+      item-selector=".item"
+    >
+      <div v-masonry-tile class="item" v-for="photo in paginatedPhotos">
+        <photo :key="photo.id" :url="photo.url"/>
+      </div>
     </div>
-    <div v-if="pageCount > 1">
-      <button class="leftFixed" :disabled="pageNumber === 0" @click="prevPage">Previous</button>
-      <button class="rigthFixed" :disabled="pageNumber >= pageCount -1" @click="nextPage">Next</button>
+    <div class="mt-4 mb-4" v-if="pageCount > 1">
+      <b-button
+        class="ml-4"
+        :disabled="pageNumber === 0"
+        @click="prevPage"
+        size="lg"
+        variant="success"
+      >Previous</b-button>
+      <b-button
+        class="rightFloat mr-4 ml-2"
+        :disabled="pageNumber >= pageCount -1"
+        @click="nextPage"
+        size="lg"
+        variant="success"
+      >Next</b-button>
     </div>
   </div>
 </template>
@@ -65,14 +79,7 @@ export default {
 .centerAlign {
   margin: auto;
 }
-.rigthFixed {
-  position: fixed;
-  top: 50%;
-  right: 30px;
-}
-.leftFixed {
-  position: fixed;
-  top: 50%;
-  left: 30px;
+.rightFloat {
+  float: right;
 }
 </style>
