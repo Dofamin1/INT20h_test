@@ -28,7 +28,8 @@ const flickr = {
       api_key: apiKey,
       format: 'json',
       nojsoncallback: '1',
-      method: 'flickr.galleries.getPhotos',
+      method: 'flickr.people.getPublicPhotos',
+      user_id: '144522605@N06',
       gallery_id: galleryId,
     });
     const reqUrl = `${baseUrl}?${params.toString()}`;
@@ -47,13 +48,10 @@ const flickr = {
   },
   fetchAllPhotos() {
     return Promise.all([
-      flickr.fetchPhotosByGalleryId('72157706084897874'),
+      flickr.fetchPhotosByGalleryId('72157674388093532'),
       flickr.fetchPhotosByTags(['int20h']),
     ]).then((data) => {
-      const reducer = (accumulator, currentValue) => [
-        ...accumulator,
-        ...currentValue.photos.photo,
-      ];
+      const reducer = (accumulator, currentValue) => [...accumulator, ...currentValue.photos.photo];
       const allPhotos = data.reduce(reducer, []);
       const photosWithoutDuplicates = helpers.removeDuplicates({
         array: allPhotos,
