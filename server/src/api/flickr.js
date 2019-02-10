@@ -31,6 +31,7 @@ const flickr = {
       method: 'flickr.people.getPublicPhotos',
       user_id: '144522605@N06',
       gallery_id: galleryId,
+      extras: 'url_l',
     });
     const reqUrl = `${baseUrl}?${params.toString()}`;
     return makeRequest(reqUrl);
@@ -42,6 +43,7 @@ const flickr = {
       nojsoncallback: '1',
       method: 'flickr.photos.search',
       tags: tags.join(','),
+      extras: 'url_l',
     });
     const reqUrl = `${baseUrl}?${params.toString()}`;
     return makeRequest(reqUrl);
